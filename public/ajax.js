@@ -1,12 +1,9 @@
-$.get('/todos', function(data) {
-    
-});
-
-$('form').submit(function(e) {
+$('#new-todo-form').submit(function(e){
     e.preventDefault();
-    var formData = $(this).serialize();
-    $.post('/todos', formData, function(data){
-        console.log(data);
-    });
 
+    var todoItem = $(this).serialize();
+
+    $.post('/todos', todoItem, function(data){
+        debugger
+    });
 });
