@@ -49,3 +49,13 @@ $('#todo-list').on('submit', '.delete-item-form', function (e) {
         $(this).find('button').blur();
     }
 });
+
+$('#search').on('input', function (e) {
+    e.preventDefault();
+    $.get('/todos?keyword=' + e.target.value, function (data) {
+        $('#todo-list').html('');
+        data.forEach(function (todo) {
+            $('#todo-list').append('\n                <li class="list-group-item">\n                    <form action="/todos/' + todo._id + '" method="POST" class="edit-item-form">\n                        <div class="form-group">\n                            <label for="' + todo._id + '">Item Text</label>\n                            <input type="text" value="' + todo.text + '" name="todo[text]" class="form-control" id="' + todo._id + '">\n                        </div>\n                        <button class="btn btn-primary">Update Item</button>\n                    </form>\n                    <span class="lead">\n                        ' + todo.text + '\n                    </span>\n                    <div class="pull-right">\n                        <button class="btn btn-sm btn-warning edit-button">Edit</button>\n                        <form style="display: inline" method="POST" action="/todos/' + todo._id + '" class="delete-item-form">\n                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>\n                        </form>\n                    </div>\n                    <div class="clearfix"></div>\n                </li>\n                ');
+        });
+    });
+});

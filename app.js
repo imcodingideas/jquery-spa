@@ -22,18 +22,36 @@ app.get("/", function(req, res){
   res.redirect("/todos");
 });
 
+// function to be used in the .get("/todos", ..) route
+// this allows us to escape any special characters with a backslash
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
 app.get("/todos", function(req, res){
-  Todo.find({}, function(err, todos){
-    if(err){
-      console.log(err);
-    } else {
-      if(req.xhr) {
-        res.json(todos);
+  if(req.query.keyword) {
+    const regex = new RegExp(escapeRegex(req.query.keyword), 'gi'); 
+    Todo.find({ text: regex }, function(err, todos){
+      if(err){
+        console.log(err);
       } else {
-        res.render("index", {todos: todos}); 
+        res.json(todos);
       }
-    }
-  })
+    });
+  } else {
+  
+    Todo.find({}, function(err, todos){ 
+      if(err){
+        console.log(err);
+      } else {
+        if(req.xhr) {
+          res.json(todos);
+        } else {
+          res.render("index", {todos: todos});
+        }
+      }
+    });
+  }
 });
 
 app.get("/todos/new", function(req, res){
