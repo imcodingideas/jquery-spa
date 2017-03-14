@@ -47,7 +47,11 @@ app.post("/todos", function(req, res){
     if(err){
       res.render("new");
     } else {
+      if(req.xhr) {
+        res.json(newTodo);
+      } else {
         res.redirect("/todos");
+      }
     }
   });
 });
