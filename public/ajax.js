@@ -23,3 +23,7 @@ $('#new-todo-form').submit(function(e){
         $('#new-todo-form').find('.form-control').val('');
     });
 });
+
+$('#todo-list').on('click', '.edit-button', function(){
+    $(this).parent().siblings('.edit-item-form').toggle();
+});
